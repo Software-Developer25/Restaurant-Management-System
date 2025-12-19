@@ -6,7 +6,6 @@
     <title>Savory Delights | Gourmet Restaurant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* All your existing CSS remains exactly the same */
         * {
             margin: 0;
             padding: 0;
@@ -23,223 +22,837 @@
             --transition: all 0.5s ease;
         }
 
-        /* ... (ALL EXISTING CSS REMAINS EXACTLY THE SAME) ... */
-
-        /* NEW: Loading Spinner Styles */
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary);
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
+        html {
+            scroll-behavior: smooth;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            overflow-x: hidden;
         }
 
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: #777;
-        }
-
-        /* NEW: User Menu Styles */
-        .user-menu {
-            position: relative;
-        }
-
-        .user-dropdown {
+        /* Page Container */
+        .page-container {
             display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            min-height: 100vh;
+        }
+
+        .page-container.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
             z-index: 1000;
-            margin-top: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .user-dropdown.active {
-            display: block;
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .user-dropdown a {
-            display: block;
-            padding: 0.8rem 1rem;
-            color: var(--secondary);
-            text-decoration: none;
-            border-bottom: 1px solid #eee;
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            cursor: pointer;
         }
 
-        .user-dropdown a:hover {
-            background-color: #f5f5f5;
+        .logo span {
             color: var(--primary);
         }
 
-        .user-dropdown a:last-child {
-            border-bottom: none;
+        nav ul {
+            display: flex;
+            list-style: none;
         }
 
-        .user-welcome {
-            color: var(--accent);
-            margin-right: 1rem;
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
             font-weight: 500;
-        }
-
-        /* NEW: Alert Styles */
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .close-alert {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
+            transition: color 0.3s;
             cursor: pointer;
-            color: inherit;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
         }
 
-        /* NEW: Modal Styles */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .modal-overlay.active {
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Common Section Styles */
+        .section {
+            padding: 6rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: #777;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Home Page */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 2rem;
         }
 
-        .modal {
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .hero-button:hover {
+            background-color: #e67e22;
+            transform: translateY(-3px);
+        }
+
+        .featured-dishes {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .dish-card {
             background-color: white;
             border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
         }
 
-        .modal-header {
+        .dish-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .dish-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .dish-info {
             padding: 1.5rem;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            min-height: 150px;
+            height: 100%;
+            margin-top: auto;
         }
 
-        .modal-header h3 {
-            margin: 0;
+        .dish-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
             color: var(--secondary);
         }
 
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
+        .dish-info p {
             color: #777;
+            margin-bottom: 1rem;
+            min-height: 60px;
+            line-height: 1.5;
         }
 
-        .modal-body {
+        .dish-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .add-to-cart {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary);
+        }
+
+        /* Menu Page */
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .category-btn {
+            background-color: white;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .menu-item-info {
             padding: 1.5rem;
         }
 
-        /* NEW: Order Status Styles */
-        .order-status {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+        .menu-item-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .menu-item-info p {
+            color: #777;
+            margin-bottom: 1rem;
+            line-height: 1.5;
             font-size: 0.9rem;
-            font-weight: 500;
-            text-transform: uppercase;
         }
 
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
+        .menu-item-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .status-confirmed {
-            background-color: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .status-preparing {
-            background-color: #d1e7ff;
-            color: #084298;
-        }
-
-        .status-delivering {
-            background-color: #cff4fc;
-            color: #055160;
-        }
-
-        .status-delivered {
-            background-color: #d1e7dd;
-            color: #0f5132;
-        }
-
-        .status-cancelled {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        /* NEW: Reservation Form Styles */
-        .reservation-form {
+        /* About Page */
+        .about-content {
             display: grid;
-            gap: 1rem;
             grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
         }
 
-        .reservation-form .full-width {
+        .about-image {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .chef-team {
+            margin-top: 4rem;
+        }
+
+        .chef-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chef-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .chef-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background-size: cover;
+            background-position: center;
+            border: 5px solid var(--light);
+        }
+
+        .chef-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .chef-card p {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .chef-card .chef-bio {
+            color: #777;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Contact Page */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .contact-details {
+            margin-bottom: 2rem;
+        }
+
+        .contact-details p {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-details i {
+            margin-right: 1rem;
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .opening-hours {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .opening-hours h4 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .opening-hours ul {
+            list-style: none;
+        }
+
+        .opening-hours li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .opening-hours li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .map-container {
+            margin-top: 4rem;
             grid-column: 1 / -1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Responsive Updates */
+        .map-placeholder {
+            height: 400px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 1.2rem;
+        }
+
+        /* NEW: Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .login-form {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--secondary);
+        }
+
+        .login-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .login-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* NEW: Cart Page Styles */
+        .cart-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .cart-items {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 80px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            margin-right: 1.5rem;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-details h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .cart-item-price {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            margin: 0 1.5rem;
+        }
+
+        .quantity-btn {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            height: 30px;
+            margin: 0 5px;
+        }
+
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .cart-summary {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-row.total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom: none;
+            color: var(--secondary);
+        }
+
+        .checkout-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .checkout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-cart h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+        }
+
+        /* Animation for food items */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .user-welcome {
-                display: none;
+            .header-container {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content, .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                height: 300px;
             }
             
-            .reservation-form {
-                grid-template-columns: 1fr;
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .cart-item-image {
+                margin-bottom: 1rem;
+            }
+            
+            .cart-item-quantity {
+                margin: 1rem 0;
             }
         }
     </style>
@@ -255,31 +868,14 @@
                     <li><a class="nav-link" onclick="showPage('menu')">Menu</a></li>
                     <li><a class="nav-link" onclick="showPage('about')">About</a></li>
                     <li><a class="nav-link" onclick="showPage('contact')">Contact</a></li>
+                    <!-- NEW: Cart and Login navigation items -->
                     <li><a class="nav-link" onclick="showPage('cart')"><i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a></li>
-                    
-                    <!-- Updated Login/User Menu -->
-                    <li id="login-nav-item">
-                        <a class="nav-link" onclick="showPage('login')"><i class="fas fa-user"></i> Login</a>
-                    </li>
-                    <li id="user-nav-item" style="display: none;" class="user-menu">
-                        <a class="nav-link" id="user-menu-toggle">
-                            <i class="fas fa-user-circle"></i> <span class="user-welcome" id="user-name"></span>
-                        </a>
-                        <div class="user-dropdown" id="user-dropdown">
-                            <a onclick="showPage('orders')"><i class="fas fa-clipboard-list"></i> My Orders</a>
-                            <a onclick="showPage('reservations')"><i class="fas fa-calendar-alt"></i> My Reservations</a>
-                            <a onclick="showPage('profile')"><i class="fas fa-user-cog"></i> Profile</a>
-                            <a onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </div>
-                    </li>
+                    <li><a class="nav-link" onclick="showPage('login')"><i class="fas fa-user"></i> Login</a></li>
                 </ul>
             </nav>
-            <button class="cta-button" onclick="showReservationModal()">Reserve a Table</button>
+            <button class="cta-button" onclick="showPage('contact')">Reserve a Table</button>
         </div>
     </header>
-
-    <!-- Alert Container -->
-    <div id="alert-container" style="position: fixed; top: 80px; right: 20px; z-index: 1000; width: 300px;"></div>
 
     <!-- Home Page -->
     <div id="home" class="page-container active">
@@ -296,11 +892,72 @@
                 <h2>Our Signature Dishes</h2>
                 <p>Handcrafted with passion and the finest ingredients to deliver an unforgettable dining experience.</p>
             </div>
-            <div class="dishes-grid" id="featured-dishes-container">
-                <!-- Featured dishes will be loaded dynamically -->
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading featured dishes...</p>
+            <div class="dishes-grid">
+                <div class="dish-card animate">
+                    <div class="dish-image" style="background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="dish-info">
+                        <h3>Truffle Mushroom Risotto</h3>
+                        <p>Creamy Arborio rice with wild mushrooms, white truffle oil, and Parmesan cheese.</p>
+                        <div class="dish-price">
+                            <span class="price">$24.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card animate">
+                    <div class="dish-image" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="dish-info">
+                        <h3>Grilled Salmon with Asparagus</h3>
+                        <p>Fresh Atlantic salmon grilled to perfection, served with roasted asparagus and lemon butter sauce.</p>
+                        <div class="dish-price">
+                            <span class="price">$28.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card animate">
+                    <div class="dish-image" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="dish-info">
+                        <h3>Herb-Crusted Rack of Lamb</h3>
+                        <p>Tender Australian lamb with a rosemary and thyme crust, served with mint jus and seasonal vegetables.</p>
+                        <div class="dish-price">
+                            <span class="price">$36.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card animate">
+                    <div class="dish-image" style="background-image: url('https://images.unsplash.com/photo-1565299507177-b0ac66763828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="dish-info">
+                        <h3>Beef Wellington</h3>
+                        <p>Prime beef tenderloin wrapped in puff pastry with mushroom duxelles and prosciutto.</p>
+                        <div class="dish-price">
+                            <span class="price">$42.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card animate">
+                    <div class="dish-image" style="background-image: url('https://images.unsplash.com/photo-1563379091339-03246963d96f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="dish-info">
+                        <h3>Lobster Thermidor</h3>
+                        <p>Fresh lobster meat in a creamy brandy sauce, baked to perfection with Gruyère cheese.</p>
+                        <div class="dish-price">
+                            <span class="price">$38.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card animate">
+                    <div class="dish-image" style="background-image: url('https://images.unsplash.com/photo-1598214886806-c87b84b7078b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="dish-info">
+                        <h3>Burrata Caprese</h3>
+                        <p>Fresh burrata cheese with heirloom tomatoes, basil, and balsamic glaze.</p>
+                        <div class="dish-price">
+                            <span class="price">$16.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -322,19 +979,184 @@
                 <button class="category-btn" onclick="filterMenu('drinks')">Drinks</button>
             </div>
             
-            <div class="menu-items" id="menu-items-container">
-                <!-- Menu items will be loaded dynamically -->
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading menu items...</p>
+            <div class="menu-items">
+                <!-- Appetizers -->
+                <div class="menu-item" data-category="appetizers">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1598214886806-c87b84b7078b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Burrata Caprese</h3>
+                        <p>Fresh burrata cheese with heirloom tomatoes, basil, and balsamic glaze.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$16.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="appetizers">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Truffle Arancini</h3>
+                        <p>Crispy risotto balls filled with mozzarella and black truffle, served with marinara sauce.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$14.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="appetizers">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1626700051175-6818013e0571?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Seafood Platter</h3>
+                        <p>Fresh oysters, shrimp cocktail, ceviche, and smoked salmon with traditional accompaniments.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$24.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Courses -->
+                <div class="menu-item" data-category="mains">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Filet Mignon</h3>
+                        <p>8oz premium beef tenderloin, grilled to perfection with red wine reduction and truffle mashed potatoes.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$42.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="mains">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Herb-Crusted Rack of Lamb</h3>
+                        <p>Tender Australian lamb with a rosemary and thyme crust, served with mint jus and seasonal vegetables.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$36.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="mains">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1565299507177-b0ac66763828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Beef Wellington</h3>
+                        <p>Prime beef tenderloin wrapped in puff pastry with mushroom duxelles and prosciutto.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$42.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="mains">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1563379091339-03246963d96f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Lobster Thermidor</h3>
+                        <p>Fresh lobster meat in a creamy brandy sauce, baked to perfection with Gruyère cheese.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$38.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="mains">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Duck Confit</h3>
+                        <p>Slow-cooked duck leg with crispy skin, served with garlic potatoes and orange glaze.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$32.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Desserts -->
+                <div class="menu-item" data-category="desserts">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Chocolate Lava Cake</h3>
+                        <p>Warm chocolate cake with a molten center, served with vanilla bean ice cream.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$12.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="desserts">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Tiramisu</h3>
+                        <p>Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cream.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$10.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="desserts">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Crème Brûlée</h3>
+                        <p>Rich vanilla custard with a caramelized sugar crust, served with fresh berries.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$9.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Drinks -->
+                <div class="menu-item" data-category="drinks">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Signature Cocktails</h3>
+                        <p>Handcrafted cocktails using premium spirits and fresh ingredients. Ask about our seasonal specials.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$14.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="drinks">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Wine Selection</h3>
+                        <p>Curated selection of red, white, and sparkling wines from renowned vineyards around the world.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$12.99 - $25.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="drinks">
+                    <div class="menu-item-image" style="background-image: url('https://images.unsplash.com/photo-1572119865084-43c285814d63?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80')"></div>
+                    <div class="menu-item-info">
+                        <h3>Craft Beers</h3>
+                        <p>Selection of local and international craft beers, including IPAs, stouts, and lagers.</p>
+                        <div class="menu-item-price">
+                            <span class="price">$8.99</span>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- About Page (unchanged) -->
+    <!-- About Page -->
     <div id="about" class="page-container">
-        <!-- ... existing about page content ... -->
         <section class="section">
             <div class="section-title">
                 <h2>Our Story</h2>
@@ -442,148 +1264,38 @@
         </section>
     </div>
 
-    <!-- Login Page (Updated) -->
+    <!-- NEW: Login Page -->
     <div id="login" class="page-container">
         <section class="section">
             <div class="section-title">
-                <h2 id="login-title">Login to Your Account</h2>
-                <p id="login-subtitle">Access your account to view order history and save favorites</p>
-            </div>
-            
-            <div class="login-container">
-                <div class="login-form" id="login-form-container">
-                    <!-- Login form will be loaded dynamically based on mode -->
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading form...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- NEW: Registration Page -->
-    <div id="register" class="page-container">
-        <section class="section">
-            <div class="section-title">
-                <h2>Create Your Account</h2>
-                <p>Join Savory Delights to track orders and save favorites</p>
+                <h2>Login to Your Account</h2>
+                <p>Access your account to view order history and save favorites</p>
             </div>
             
             <div class="login-container">
                 <div class="login-form">
-                    <h2>Sign Up</h2>
-                    <form id="registerForm">
+                    <h2>Welcome Back</h2>
+                    <form id="loginForm">
                         <div class="form-group">
-                            <label for="reg-name">Full Name</label>
-                            <input type="text" id="reg-name" required>
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" required>
                         </div>
                         <div class="form-group">
-                            <label for="reg-email">Email Address</label>
-                            <input type="email" id="reg-email" required>
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" required>
                         </div>
-                        <div class="form-group">
-                            <label for="reg-phone">Phone Number</label>
-                            <input type="tel" id="reg-phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reg-password">Password</label>
-                            <input type="password" id="reg-password" required minlength="6">
-                        </div>
-                        <div class="form-group">
-                            <label for="reg-confirm-password">Confirm Password</label>
-                            <input type="password" id="reg-confirm-password" required>
-                        </div>
-                        <button type="submit" class="login-btn">Create Account</button>
+                        <button type="submit" class="login-btn">Login</button>
                     </form>
                     <div class="form-footer">
-                        <p>Already have an account? <a href="#" onclick="showPage('login')">Login here</a></p>
+                        <p>Don't have an account? <a href="#" onclick="alert('Registration page would open here')">Sign up here</a></p>
+                        <p><a href="#" onclick="alert('Password reset would be handled here')">Forgot your password?</a></p>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- NEW: Orders Page -->
-    <div id="orders" class="page-container">
-        <section class="section">
-            <div class="section-title">
-                <h2>My Orders</h2>
-                <p>Track your orders and view order history</p>
-            </div>
-            
-            <div class="cart-container">
-                <div id="orders-content">
-                    <!-- Orders will be loaded dynamically -->
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading your orders...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- NEW: Reservations Page -->
-    <div id="reservations" class="page-container">
-        <section class="section">
-            <div class="section-title">
-                <h2>My Reservations</h2>
-                <p>View and manage your table reservations</p>
-            </div>
-            
-            <div class="cart-container">
-                <div id="reservations-content">
-                    <!-- Reservations will be loaded dynamically -->
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading your reservations...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- NEW: Profile Page -->
-    <div id="profile" class="page-container">
-        <section class="section">
-            <div class="section-title">
-                <h2>My Profile</h2>
-                <p>Manage your account information</p>
-            </div>
-            
-            <div class="login-container">
-                <div class="login-form">
-                    <h2>Profile Information</h2>
-                    <form id="profileForm">
-                        <div class="form-group">
-                            <label for="profile-name">Full Name</label>
-                            <input type="text" id="profile-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="profile-email">Email Address</label>
-                            <input type="email" id="profile-email" required readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="profile-phone">Phone Number</label>
-                            <input type="tel" id="profile-phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="profile-password">New Password (leave blank to keep current)</label>
-                            <input type="password" id="profile-password">
-                        </div>
-                        <div class="form-group">
-                            <label for="profile-confirm-password">Confirm New Password</label>
-                            <input type="password" id="profile-confirm-password">
-                        </div>
-                        <button type="submit" class="login-btn">Update Profile</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Cart Page (Updated) -->
+    <!-- NEW: Cart Page -->
     <div id="cart" class="page-container">
         <section class="section">
             <div class="section-title">
@@ -594,10 +1306,6 @@
             <div class="cart-container">
                 <div id="cart-content">
                     <!-- Cart items will be dynamically added here -->
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading your cart...</p>
-                    </div>
                 </div>
                 
                 <div class="cart-summary">
@@ -609,105 +1317,14 @@
                         <span>Tax (8%):</span>
                         <span id="tax">$0.00</span>
                     </div>
-                    <div class="summary-row">
-                        <span>Delivery Fee:</span>
-                        <span id="delivery-fee">$0.00</span>
-                    </div>
                     <div class="summary-row total">
                         <span>Total:</span>
                         <span id="total">$0.00</span>
                     </div>
-                    
-                    <!-- Delivery Options -->
-                    <div class="form-group" style="margin-top: 1.5rem;">
-                        <label for="delivery-option">Delivery Option</label>
-                        <select id="delivery-option" class="form-group" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
-                            <option value="pickup">Pickup</option>
-                            <option value="delivery">Delivery</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Delivery Address (hidden by default) -->
-                    <div id="delivery-address-group" class="form-group" style="display: none;">
-                        <label for="delivery-address">Delivery Address</label>
-                        <textarea id="delivery-address" placeholder="Enter your delivery address" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
-                    </div>
-                    
-                    <!-- Special Instructions -->
-                    <div class="form-group">
-                        <label for="special-instructions">Special Instructions</label>
-                        <textarea id="special-instructions" placeholder="Any special instructions for your order?" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
-                    </div>
-                    
                     <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
                 </div>
             </div>
         </section>
-    </div>
-
-    <!-- NEW: Reservation Modal -->
-    <div class="modal-overlay" id="reservation-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Make a Reservation</h3>
-                <button class="close-modal" onclick="closeReservationModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="reservationForm">
-                    <div class="reservation-form">
-                        <div class="form-group">
-                            <label for="reservation-name">Name *</label>
-                            <input type="text" id="reservation-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reservation-email">Email *</label>
-                            <input type="email" id="reservation-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reservation-phone">Phone *</label>
-                            <input type="tel" id="reservation-phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="reservation-date">Date *</label>
-                            <input type="date" id="reservation-date" required min="<?php echo date('Y-m-d'); ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="reservation-time">Time *</label>
-                            <select id="reservation-time" required>
-                                <option value="">Select Time</option>
-                                <option value="17:00">5:00 PM</option>
-                                <option value="17:30">5:30 PM</option>
-                                <option value="18:00">6:00 PM</option>
-                                <option value="18:30">6:30 PM</option>
-                                <option value="19:00">7:00 PM</option>
-                                <option value="19:30">7:30 PM</option>
-                                <option value="20:00">8:00 PM</option>
-                                <option value="20:30">8:30 PM</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="reservation-guests">Number of Guests *</label>
-                            <select id="reservation-guests" required>
-                                <option value="1">1 Person</option>
-                                <option value="2">2 People</option>
-                                <option value="3">3 People</option>
-                                <option value="4">4 People</option>
-                                <option value="5">5 People</option>
-                                <option value="6">6 People</option>
-                                <option value="7">7 People</option>
-                                <option value="8">8 People</option>
-                                <option value="9">9+ People</option>
-                            </select>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="reservation-requests">Special Requests (Optional)</label>
-                            <textarea id="reservation-requests" rows="3" placeholder="Any special requests or dietary restrictions?"></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="submit-btn" style="margin-top: 1.5rem; width: 100%;">Book Reservation</button>
-                </form>
-            </div>
-        </div>
     </div>
 
     <!-- Footer -->
@@ -743,8 +1360,8 @@
             <div class="footer-column">
                 <h3>Newsletter</h3>
                 <p>Subscribe to receive updates on special offers and new menu items.</p>
-                <form id="newsletterForm">
-                    <input type="email" id="newsletter-email" placeholder="Your email address" style="padding: 0.7rem; width: 100%; margin-bottom: 1rem; border-radius: 4px; border: none;">
+                <form>
+                    <input type="email" placeholder="Your email address" style="padding: 0.7rem; width: 100%; margin-bottom: 1rem; border-radius: 4px; border: none;">
                     <button type="submit" class="cta-button" style="width: 100%;">Subscribe</button>
                 </form>
             </div>
@@ -754,112 +1371,11 @@
         </div>
     </footer>
 
-    <!-- API Configuration -->
     <script>
-        // API Configuration
-        const API_BASE_URL = 'http://localhost:3001/api';
+        // Cart functionality
+        let cart = [];
         
-        // Session management
-        function getSessionId() {
-            let sessionId = localStorage.getItem('sessionId');
-            if (!sessionId) {
-                sessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('sessionId', sessionId);
-            }
-            return sessionId;
-        }
-
-        // Authentication state
-        function isLoggedIn() {
-            return !!localStorage.getItem('token');
-        }
-
-        function getCurrentUser() {
-            const user = localStorage.getItem('user');
-            return user ? JSON.parse(user) : null;
-        }
-
-        function getToken() {
-            return localStorage.getItem('token');
-        }
-
-        // API call helper
-        async function apiCall(endpoint, method = 'GET', data = null, requiresAuth = false) {
-            const options = {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            };
-
-            if (requiresAuth) {
-                const token = getToken();
-                if (!token) {
-                    throw new Error('Authentication required');
-                }
-                options.headers['Authorization'] = `Bearer ${token}`;
-            }
-
-            if (data) {
-                options.body = JSON.stringify(data);
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || `API request failed: ${response.status}`);
-                }
-
-                return result;
-            } catch (error) {
-                console.error('API Error:', error);
-                showAlert(error.message, 'error');
-                throw error;
-            }
-        }
-
-        // Alert system
-        function showAlert(message, type = 'info') {
-            const container = document.getElementById('alert-container');
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.innerHTML = `
-                <span>${message}</span>
-                <button class="close-alert" onclick="this.parentElement.remove()">&times;</button>
-            `;
-            container.appendChild(alert);
-
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                if (alert.parentElement) {
-                    alert.remove();
-                }
-            }, 5000);
-        }
-
-        // User interface updates
-        function updateUserUI() {
-            const isUserLoggedIn = isLoggedIn();
-            const user = getCurrentUser();
-            
-            if (isUserLoggedIn && user) {
-                document.getElementById('login-nav-item').style.display = 'none';
-                document.getElementById('user-nav-item').style.display = 'block';
-                document.getElementById('user-name').textContent = user.name;
-                
-                // Update login page if active
-                if (document.getElementById('login').classList.contains('active')) {
-                    showPage('home');
-                }
-            } else {
-                document.getElementById('login-nav-item').style.display = 'block';
-                document.getElementById('user-nav-item').style.display = 'none';
-            }
-        }
-
-        // Page navigation (updated)
+        // Page navigation functionality
         function showPage(pageId) {
             // Hide all pages
             document.querySelectorAll('.page-container').forEach(page => {
@@ -876,172 +1392,131 @@
             
             // Find and activate the corresponding nav link
             document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.textContent.toLowerCase().includes(pageId.toLowerCase()) || 
+                if (link.textContent.toLowerCase().includes(pageId) || 
                     (pageId === 'home' && link.textContent.toLowerCase() === 'home')) {
                     link.classList.add('active');
                 }
             });
             
-            // Load page-specific content
-            switch(pageId) {
-                case 'home':
-                    loadFeaturedDishes();
-                    break;
-                case 'menu':
-                    loadMenuItems();
-                    break;
-                case 'cart':
-                    loadCart();
-                    break;
-                case 'orders':
-                    if (isLoggedIn()) {
-                        loadOrders();
-                    } else {
-                        showPage('login');
-                        showAlert('Please login to view your orders', 'info');
-                    }
-                    break;
-                case 'reservations':
-                    if (isLoggedIn()) {
-                        loadReservations();
-                    } else {
-                        showPage('login');
-                        showAlert('Please login to view your reservations', 'info');
-                    }
-                    break;
-                case 'profile':
-                    if (isLoggedIn()) {
-                        loadProfile();
-                    } else {
-                        showPage('login');
-                        showAlert('Please login to view your profile', 'info');
-                    }
-                    break;
-                case 'login':
-                    loadLoginForm();
-                    break;
+            // If cart page is shown, update cart display
+            if (pageId === 'cart') {
+                updateCartDisplay();
             }
             
             // Scroll to top when changing pages
             window.scrollTo(0, 0);
         }
 
-        // Load featured dishes
-        async function loadFeaturedDishes() {
-            const container = document.getElementById('featured-dishes-container');
-            if (!container) return;
-            
-            try {
-                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading featured dishes...</p></div>';
-                
-                const result = await apiCall('/menu?featured=true');
-                
-                if (result.length === 0) {
-                    container.innerHTML = '<p class="loading">No featured dishes available at the moment.</p>';
-                    return;
-                }
-                
-                let dishesHTML = '';
-                result.forEach(dish => {
-                    dishesHTML += `
-                        <div class="dish-card animate">
-                            <div class="dish-image" style="background-image: url('${dish.image}')"></div>
-                            <div class="dish-info">
-                                <h3>${dish.name}</h3>
-                                <p>${dish.description}</p>
-                                <div class="dish-price">
-                                    <span class="price">$${dish.price.toFixed(2)}</span>
-                                    <button class="add-to-cart" onclick="addToCartAPI('${dish.id}')">Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                container.innerHTML = dishesHTML;
-            } catch (error) {
-                container.innerHTML = '<p class="loading">Failed to load featured dishes. Please try again later.</p>';
-            }
-        }
-
-        // Load all menu items
-        async function loadMenuItems(category = 'all') {
-            const container = document.getElementById('menu-items-container');
-            if (!container) return;
-            
-            try {
-                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading menu items...</p></div>';
-                
-                const endpoint = category === 'all' ? '/menu' : `/menu?category=${category}`;
-                const result = await apiCall(endpoint);
-                
-                if (result.length === 0) {
-                    container.innerHTML = '<p class="loading">No menu items available in this category.</p>';
-                    return;
-                }
-                
-                let menuHTML = '';
-                result.forEach(item => {
-                    menuHTML += `
-                        <div class="menu-item" data-category="${item.category}">
-                            <div class="menu-item-image" style="background-image: url('${item.image}')"></div>
-                            <div class="menu-item-info">
-                                <h3>${item.name}</h3>
-                                <p>${item.description}</p>
-                                <div class="menu-item-price">
-                                    <span class="price">$${item.price.toFixed(2)}</span>
-                                    <button class="add-to-cart" onclick="addToCartAPI('${item.id}')">Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                container.innerHTML = menuHTML;
-            } catch (error) {
-                container.innerHTML = '<p class="loading">Failed to load menu items. Please try again later.</p>';
-            }
-        }
-
-        // Menu filtering
+        // Menu filtering functionality
         function filterMenu(category) {
-            const buttons = document.querySelectorAll('.category-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
+            const menuItems = document.querySelectorAll('.menu-item');
+            const categoryButtons = document.querySelectorAll('.category-btn');
             
-            const activeBtn = Array.from(buttons).find(btn => 
-                btn.textContent.toLowerCase().includes(category.toLowerCase())
-            );
-            if (activeBtn) activeBtn.classList.add('active');
+            // Update active category button
+            categoryButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.toLowerCase() === category) {
+                    button.classList.add('active');
+                }
+            });
             
-            loadMenuItems(category);
+            // Show/hide menu items based on category
+            menuItems.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
 
-        // Cart functionality
-        let currentCart = null;
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
 
-        async function loadCart() {
-            const container = document.getElementById('cart-content');
-            if (!container) return;
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Login functionality would be implemented here!');
+            this.reset();
+        });
+
+        // Add to cart functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const dishCard = this.closest('.dish-card, .menu-item');
+                    const dishName = dishCard.querySelector('h3').textContent;
+                    const dishPrice = dishCard.querySelector('.price').textContent;
+                    const dishImage = dishCard.querySelector('.dish-image, .menu-item-image').style.backgroundImage;
+                    
+                    // Extract price as number
+                    const price = parseFloat(dishPrice.replace('$', ''));
+                    
+                    // Add item to cart
+                    addToCart(dishName, price, dishImage);
+                    
+                    // Create a temporary notification
+                    const notification = document.createElement('div');
+                    notification.textContent = `Added ${dishName} to cart!`;
+                    notification.style.position = 'fixed';
+                    notification.style.bottom = '20px';
+                    notification.style.right = '20px';
+                    notification.style.backgroundColor = 'var(--primary)';
+                    notification.style.color = 'white';
+                    notification.style.padding = '1rem 2rem';
+                    notification.style.borderRadius = '5px';
+                    notification.style.zIndex = '1000';
+                    notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+                    
+                    document.body.appendChild(notification);
+                    
+                    // Remove notification after 3 seconds
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                        notification.style.transition = 'opacity 0.5s';
+                        setTimeout(() => {
+                            document.body.removeChild(notification);
+                        }, 500);
+                    }, 3000);
+                });
+            });
+        });
+
+        // Cart functions
+        function addToCart(name, price, image) {
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => item.name === name);
             
-            try {
-                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading your cart...</p></div>';
-                
-                const sessionId = getSessionId();
-                const result = await apiCall(`/cart?sessionId=${sessionId}`);
-                currentCart = result;
-                
-                updateCartUI(result);
-            } catch (error) {
-                container.innerHTML = '<p class="loading">Failed to load cart. Please try again later.</p>';
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
             }
+            
+            updateCartCount();
         }
 
-        function updateCartUI(cart) {
-            const container = document.getElementById('cart-content');
+        function updateCartCount() {
             const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function updateCartDisplay() {
+            const cartContent = document.getElementById('cart-content');
             
-            if (!cart || cart.items.length === 0) {
-                container.innerHTML = `
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
                     <div class="empty-cart">
                         <i class="fas fa-shopping-cart"></i>
                         <h3>Your cart is empty</h3>
@@ -1049,522 +1524,72 @@
                         <button class="cta-button" onclick="showPage('menu')">Browse Menu</button>
                     </div>
                 `;
+            } else {
+                let cartHTML = '<div class="cart-items">';
                 
-                if (cartCount) {
-                    cartCount.textContent = '0';
-                }
+                cart.forEach((item, index) => {
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-image" style="${item.image}"></div>
+                            <div class="cart-item-details">
+                                <h3>${item.name}</h3>
+                                <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                            </div>
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                });
                 
-                updateCartSummary([]);
-                return;
+                cartHTML += '</div>';
+                cartContent.innerHTML = cartHTML;
             }
             
-            // Update cart count
-            const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
-            if (cartCount) {
-                cartCount.textContent = totalItems;
-            }
-            
-            // Build cart HTML
-            let cartHTML = '<div class="cart-items">';
-            cart.items.forEach((item, index) => {
-                cartHTML += `
-                    <div class="cart-item">
-                        <div class="cart-item-image" style="background-image: ${item.image}"></div>
-                        <div class="cart-item-details">
-                            <h3>${item.name}</h3>
-                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
-                        </div>
-                        <div class="cart-item-quantity">
-                            <button class="quantity-btn" onclick="updateCartItemQuantity('${item.itemId}', ${item.quantity - 1})">-</button>
-                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
-                            <button class="quantity-btn" onclick="updateCartItemQuantity('${item.itemId}', ${item.quantity + 1})">+</button>
-                        </div>
-                        <button class="remove-item" onclick="removeFromCartAPI('${item.itemId}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-            });
-            cartHTML += '</div>';
-            container.innerHTML = cartHTML;
-            
-            // Update summary
-            updateCartSummary(cart.items);
+            updateCartSummary();
         }
 
-        function updateCartSummary(items) {
-            const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            updateCartCount();
+            updateCartDisplay();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            updateCartDisplay();
+        }
+
+        function updateCartSummary() {
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
             const tax = subtotal * 0.08;
-            const deliveryFee = document.getElementById('delivery-option').value === 'delivery' ? 5.00 : 0.00;
-            const total = subtotal + tax + deliveryFee;
+            const total = subtotal + tax;
             
             document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
             document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('delivery-fee').textContent = `$${deliveryFee.toFixed(2)}`;
             document.getElementById('total').textContent = `$${total.toFixed(2)}`;
         }
 
-        async function addToCartAPI(itemId) {
-            try {
-                const sessionId = getSessionId();
-                const user = getCurrentUser();
-                
-                const data = {
-                    sessionId,
-                    itemId,
-                    quantity: 1
-                };
-                
-                if (user) {
-                    data.userId = user.id;
-                }
-                
-                await apiCall('/cart/items', 'POST', data);
-                
-                showAlert('Item added to cart!', 'success');
-                loadCart();
-            } catch (error) {
-                console.error('Failed to add item to cart:', error);
-            }
-        }
-
-        async function updateCartItemQuantity(itemId, newQuantity) {
-            if (newQuantity < 1) {
-                await removeFromCartAPI(itemId);
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty. Add some items before checkout.');
                 return;
             }
             
-            try {
-                const sessionId = getSessionId();
-                const user = getCurrentUser();
-                
-                const data = {
-                    sessionId,
-                    quantity: newQuantity
-                };
-                
-                if (user) {
-                    data.userId = user.id;
-                }
-                
-                await apiCall(`/cart/items/${itemId}`, 'PUT', data);
-                loadCart();
-            } catch (error) {
-                console.error('Failed to update item quantity:', error);
-            }
+            alert('Checkout functionality would be implemented here!');
+            // In a real application, this would redirect to a payment page
         }
-
-        async function removeFromCartAPI(itemId) {
-            try {
-                const sessionId = getSessionId();
-                const user = getCurrentUser();
-                
-                const endpoint = `/cart/items/${itemId}?sessionId=${sessionId}${user ? `&userId=${user.id}` : ''}`;
-                await apiCall(endpoint, 'DELETE');
-                
-                showAlert('Item removed from cart', 'info');
-                loadCart();
-            } catch (error) {
-                console.error('Failed to remove item from cart:', error);
-            }
-        }
-
-        // Checkout
-        async function checkout() {
-            if (!currentCart || currentCart.items.length === 0) {
-                showAlert('Your cart is empty', 'error');
-                return;
-            }
-            
-            if (!isLoggedIn()) {
-                showAlert('Please login to complete your order', 'info');
-                showPage('login');
-                return;
-            }
-            
-            try {
-                const deliveryOption = document.getElementById('delivery-option').value;
-                const deliveryAddress = deliveryOption === 'delivery' 
-                    ? document.getElementById('delivery-address').value 
-                    : null;
-                const specialInstructions = document.getElementById('special-instructions').value;
-                
-                if (deliveryOption === 'delivery' && !deliveryAddress) {
-                    showAlert('Please enter a delivery address', 'error');
-                    return;
-                }
-                
-                const data = {
-                    sessionId: getSessionId(),
-                    deliveryAddress,
-                    specialInstructions
-                };
-                
-                const result = await apiCall('/orders', 'POST', data, true);
-                
-                showAlert('Order placed successfully!', 'success');
-                showPage('orders');
-            } catch (error) {
-                console.error('Checkout failed:', error);
-            }
-        }
-
-        // Authentication functions
-        async function login(email, password) {
-            try {
-                const result = await apiCall('/auth/login', 'POST', { email, password });
-                
-                localStorage.setItem('token', result.token);
-                localStorage.setItem('user', JSON.stringify(result.user));
-                
-                // Merge cart if exists
-                await mergeCartWithUser();
-                
-                updateUserUI();
-                showAlert('Login successful!', 'success');
-                showPage('home');
-                
-                return true;
-            } catch (error) {
-                showAlert('Login failed: ' + error.message, 'error');
-                return false;
-            }
-        }
-
-        async function register(userData) {
-            try {
-                const result = await apiCall('/auth/register', 'POST', userData);
-                
-                localStorage.setItem('token', result.token);
-                localStorage.setItem('user', JSON.stringify(result.user));
-                
-                updateUserUI();
-                showAlert('Registration successful!', 'success');
-                showPage('home');
-                
-                return true;
-            } catch (error) {
-                showAlert('Registration failed: ' + error.message, 'error');
-                return false;
-            }
-        }
-
-        async function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            updateUserUI();
-            showAlert('Logged out successfully', 'info');
-            showPage('home');
-        }
-
-        async function mergeCartWithUser() {
-            const sessionId = getSessionId();
-            const user = getCurrentUser();
-            
-            if (!user) return;
-            
-            try {
-                // Get session cart
-                const sessionCart = await apiCall(`/cart?sessionId=${sessionId}`);
-                
-                if (sessionCart.items.length > 0) {
-                    // Merge with user cart
-                    for (const item of sessionCart.items) {
-                        await apiCall('/cart/items', 'POST', {
-                            userId: user.id,
-                            itemId: item.itemId,
-                            quantity: item.quantity
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to merge cart:', error);
-            }
-        }
-
-        // Load login form
-        function loadLoginForm() {
-            const container = document.getElementById('login-form-container');
-            if (!container) return;
-            
-            container.innerHTML = `
-                <h2>Welcome Back</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" required>
-                    </div>
-                    <button type="submit" class="login-btn">Login</button>
-                </form>
-                <div class="form-footer">
-                    <p>Don't have an account? <a href="#" onclick="showPage('register')">Sign up here</a></p>
-                    <p><a href="#" onclick="showAlert('Password reset feature coming soon!', 'info')">Forgot your password?</a></p>
-                </div>
-            `;
-            
-            document.getElementById('loginForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                await login(email, password);
-            });
-        }
-
-        // Load orders
-        async function loadOrders() {
-            const container = document.getElementById('orders-content');
-            if (!container) return;
-            
-            try {
-                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading your orders...</p></div>';
-                
-                const result = await apiCall('/orders', 'GET', null, true);
-                
-                if (result.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-cart">
-                            <i class="fas fa-clipboard-list"></i>
-                            <h3>No orders yet</h3>
-                            <p>Place your first order from our menu</p>
-                            <button class="cta-button" onclick="showPage('menu')">Browse Menu</button>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let ordersHTML = '<div class="cart-items">';
-                result.forEach(order => {
-                    const statusClass = `order-status status-${order.status}`;
-                    ordersHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-details" style="flex-grow: 1;">
-                                <h3>Order #${order.id.substring(0, 8)}</h3>
-                                <p>Placed on ${new Date(order.createdAt).toLocaleDateString()}</p>
-                                <p>Items: ${order.items.length}</p>
-                                <div class="summary-row" style="margin-top: 0.5rem;">
-                                    <span>Total:</span>
-                                    <span class="price">$${order.total.toFixed(2)}</span>
-                                </div>
-                                <div class="${statusClass}" style="margin-top: 0.5rem;">
-                                    ${order.status}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                ordersHTML += '</div>';
-                container.innerHTML = ordersHTML;
-            } catch (error) {
-                container.innerHTML = '<p class="loading">Failed to load orders. Please try again later.</p>';
-            }
-        }
-
-        // Load reservations
-        async function loadReservations() {
-            const container = document.getElementById('reservations-content');
-            if (!container) return;
-            
-            try {
-                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading your reservations...</p></div>';
-                
-                const result = await apiCall('/reservations', 'GET', null, true);
-                
-                if (result.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-cart">
-                            <i class="fas fa-calendar-alt"></i>
-                            <h3>No reservations yet</h3>
-                            <p>Make your first reservation</p>
-                            <button class="cta-button" onclick="showReservationModal()">Book a Table</button>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let reservationsHTML = '<div class="cart-items">';
-                result.forEach(reservation => {
-                    reservationsHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-details" style="flex-grow: 1;">
-                                <h3>Reservation for ${reservation.guests} people</h3>
-                                <p>Date: ${reservation.date} at ${reservation.time}</p>
-                                <p>Name: ${reservation.name}</p>
-                                <p>Status: <span class="order-status status-${reservation.status}">${reservation.status}</span></p>
-                                ${reservation.specialRequests ? `<p>Special Requests: ${reservation.specialRequests}</p>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-                reservationsHTML += '</div>';
-                container.innerHTML = reservationsHTML;
-            } catch (error) {
-                container.innerHTML = '<p class="loading">Failed to load reservations. Please try again later.</p>';
-            }
-        }
-
-        // Load profile
-        function loadProfile() {
-            const user = getCurrentUser();
-            if (!user) return;
-            
-            document.getElementById('profile-name').value = user.name || '';
-            document.getElementById('profile-email').value = user.email || '';
-            document.getElementById('profile-phone').value = user.phone || '';
-            
-            document.getElementById('profileForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                // Profile update logic would go here
-                showAlert('Profile update feature coming soon!', 'info');
-            });
-        }
-
-        // Reservation modal
-        function showReservationModal() {
-            document.getElementById('reservation-modal').classList.add('active');
-            
-            // Pre-fill with user data if logged in
-            const user = getCurrentUser();
-            if (user) {
-                document.getElementById('reservation-name').value = user.name || '';
-                document.getElementById('reservation-email').value = user.email || '';
-                document.getElementById('reservation-phone').value = user.phone || '';
-            }
-            
-            // Set minimum date to today
-            document.getElementById('reservation-date').min = new Date().toISOString().split('T')[0];
-        }
-
-        function closeReservationModal() {
-            document.getElementById('reservation-modal').classList.remove('active');
-            document.getElementById('reservationForm').reset();
-        }
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update user UI
-            updateUserUI();
-            
-            // Load initial data
-            loadFeaturedDishes();
-            
-            // Event listeners for delivery option
-            document.getElementById('delivery-option')?.addEventListener('change', function() {
-                const addressGroup = document.getElementById('delivery-address-group');
-                if (this.value === 'delivery') {
-                    addressGroup.style.display = 'block';
-                } else {
-                    addressGroup.style.display = 'none';
-                }
-                if (currentCart) {
-                    updateCartSummary(currentCart.items);
-                }
-            });
-            
-            // User menu toggle
-            document.getElementById('user-menu-toggle')?.addEventListener('click', function(e) {
-                e.stopPropagation();
-                document.getElementById('user-dropdown').classList.toggle('active');
-            });
-            
-            // Close user dropdown when clicking outside
-            document.addEventListener('click', function() {
-                const dropdown = document.getElementById('user-dropdown');
-                if (dropdown) {
-                    dropdown.classList.remove('active');
-                }
-            });
-            
-            // Contact form
-            document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const formData = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    subject: document.getElementById('subject').value,
-                    message: document.getElementById('message').value
-                };
-                
-                try {
-                    await apiCall('/contact', 'POST', formData);
-                    showAlert('Message sent successfully! We will get back to you soon.', 'success');
-                    document.getElementById('contactForm').reset();
-                } catch (error) {
-                    // Error is already handled by apiCall
-                }
-            });
-            
-            // Registration form
-            document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const password = document.getElementById('reg-password').value;
-                const confirmPassword = document.getElementById('reg-confirm-password').value;
-                
-                if (password !== confirmPassword) {
-                    showAlert('Passwords do not match', 'error');
-                    return;
-                }
-                
-                if (password.length < 6) {
-                    showAlert('Password must be at least 6 characters', 'error');
-                    return;
-                }
-                
-                const userData = {
-                    name: document.getElementById('reg-name').value,
-                    email: document.getElementById('reg-email').value,
-                    phone: document.getElementById('reg-phone').value,
-                    password: password
-                };
-                
-                await register(userData);
-            });
-            
-            // Reservation form
-            document.getElementById('reservationForm')?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const formData = {
-                    name: document.getElementById('reservation-name').value,
-                    email: document.getElementById('reservation-email').value,
-                    phone: document.getElementById('reservation-phone').value,
-                    date: document.getElementById('reservation-date').value,
-                    time: document.getElementById('reservation-time').value,
-                    guests: document.getElementById('reservation-guests').value,
-                    specialRequests: document.getElementById('reservation-requests').value
-                };
-                
-                try {
-                    await apiCall('/reservations', 'POST', formData);
-                    showAlert('Reservation created successfully!', 'success');
-                    closeReservationModal();
-                    
-                    // Reload reservations page if active
-                    if (document.getElementById('reservations').classList.contains('active')) {
-                        loadReservations();
-                    }
-                } catch (error) {
-                    // Error is already handled by apiCall
-                }
-            });
-            
-            // Newsletter form
-            document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('newsletter-email').value;
-                showAlert('Thank you for subscribing to our newsletter!', 'success');
-                document.getElementById('newsletterForm').reset();
-            });
-        });
-
-        // Initialize page
-        updateUserUI();
-        loadFeaturedDishes();
     </script>
 </body>
 </html>
