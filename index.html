@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savory Delights | Gourmet Restaurant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* All your existing CSS remains exactly the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e74c3c;
+            --secondary: #2c3e50;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --transition: all 0.5s ease;
+        }
+
+        /* ... (ALL EXISTING CSS REMAINS EXACTLY THE SAME) ... */
+
+        /* NEW: Loading Spinner Styles */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+        }
+
+        /* NEW: User Menu Styles */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-dropdown a:hover {
+            background-color: #f5f5f5;
+            color: var(--primary);
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .user-welcome {
+            color: var(--accent);
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+
+        /* NEW: Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .close-alert {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        /* NEW: Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--secondary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* NEW: Order Status Styles */
+        .order-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-preparing {
+            background-color: #d1e7ff;
+            color: #084298;
+        }
+
+        .status-delivering {
+            background-color: #cff4fc;
+            color: #055160;
+        }
+
+        .status-delivered {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* NEW: Reservation Form Styles */
+        .reservation-form {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .reservation-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive Updates */
+        @media (max-width: 768px) {
+            .user-welcome {
+                display: none;
+            }
+            
+            .reservation-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo" onclick="showPage('home')">Savory<span>Delights</span></div>
+            <nav>
+                <ul>
+                    <li><a class="nav-link active" onclick="showPage('home')">Home</a></li>
+                    <li><a class="nav-link" onclick="showPage('menu')">Menu</a></li>
+                    <li><a class="nav-link" onclick="showPage('about')">About</a></li>
+                    <li><a class="nav-link" onclick="showPage('contact')">Contact</a></li>
+                    <li><a class="nav-link" onclick="showPage('cart')"><i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a></li>
+                    
+                    <!-- Updated Login/User Menu -->
+                    <li id="login-nav-item">
+                        <a class="nav-link" onclick="showPage('login')"><i class="fas fa-user"></i> Login</a>
+                    </li>
+                    <li id="user-nav-item" style="display: none;" class="user-menu">
+                        <a class="nav-link" id="user-menu-toggle">
+                            <i class="fas fa-user-circle"></i> <span class="user-welcome" id="user-name"></span>
+                        </a>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <a onclick="showPage('orders')"><i class="fas fa-clipboard-list"></i> My Orders</a>
+                            <a onclick="showPage('reservations')"><i class="fas fa-calendar-alt"></i> My Reservations</a>
+                            <a onclick="showPage('profile')"><i class="fas fa-user-cog"></i> Profile</a>
+                            <a onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <button class="cta-button" onclick="showReservationModal()">Reserve a Table</button>
+        </div>
+    </header>
+
+    <!-- Alert Container -->
+    <div id="alert-container" style="position: fixed; top: 80px; right: 20px; z-index: 1000; width: 300px;"></div>
+
+    <!-- Home Page -->
+    <div id="home" class="page-container active">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Experience Culinary Excellence</h1>
+                <p>Indulge in our carefully crafted dishes made with the finest ingredients and passion for authentic flavors that will tantalize your taste buds.</p>
+                <button class="hero-button" onclick="showPage('menu')">View Our Menu</button>
+            </div>
+        </section>
+
+        <section class="featured-dishes">
+            <div class="section-title">
+                <h2>Our Signature Dishes</h2>
+                <p>Handcrafted with passion and the finest ingredients to deliver an unforgettable dining experience.</p>
+            </div>
+            <div class="dishes-grid" id="featured-dishes-container">
+                <!-- Featured dishes will be loaded dynamically -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading featured dishes...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Menu Page -->
+    <div id="menu" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>Our Menu</h2>
+                <p>Explore our diverse selection of culinary delights crafted with the finest ingredients.</p>
+            </div>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" onclick="filterMenu('all')">All</button>
+                <button class="category-btn" onclick="filterMenu('appetizers')">Appetizers</button>
+                <button class="category-btn" onclick="filterMenu('mains')">Main Courses</button>
+                <button class="category-btn" onclick="filterMenu('desserts')">Desserts</button>
+                <button class="category-btn" onclick="filterMenu('drinks')">Drinks</button>
+            </div>
+            
+            <div class="menu-items" id="menu-items-container">
+                <!-- Menu items will be loaded dynamically -->
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading menu items...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Page (unchanged) -->
+    <div id="about" class="page-container">
+        <!-- ... existing about page content ... -->
+        <section class="section">
+            <div class="section-title">
+                <h2>Our Story</h2>
+                <p>Discover the passion and dedication behind Savory Delights</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-image" style="background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
+                <div class="about-text">
+                    <h3>A Culinary Journey Since 2005</h3>
+                    <p>Founded by Chef Marco Bellini, Savory Delights began as a small family restaurant with a big dream: to bring authentic, flavorful cuisine to our community using the freshest ingredients and time-honored techniques.</p>
+                    <p>Over the years, we've grown into a beloved dining destination, but our commitment to quality and hospitality remains unchanged. Every dish tells a story, and every meal is crafted with care and passion.</p>
+                    <p>We believe that great food brings people together, and we're honored to be part of your special moments - from intimate dinners to grand celebrations.</p>
+                </div>
+            </div>
+            
+            <div class="chef-team">
+                <div class="section-title">
+                    <h2>Meet Our Chefs</h2>
+                    <p>The talented culinary artists behind our delicious creations</p>
+                </div>
+                
+                <div class="chef-grid">
+                    <div class="chef-card">
+                        <div class="chef-image" style="background-image: url('https://images.unsplash.com/photo-1583394293214-28ded15ee548?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80')"></div>
+                        <h4>Marco Bellini</h4>
+                        <p>Executive Chef & Owner</p>
+                        <p class="chef-bio">With over 20 years of culinary experience, Chef Marco brings his Italian heritage and global influences to every dish.</p>
+                    </div>
+                    
+                    <div class="chef-card">
+                        <div class="chef-image" style="background-image: url('https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80')"></div>
+                        <h4>Sophie Laurent</h4>
+                        <p>Pastry Chef</p>
+                        <p class="chef-bio">Trained in Paris, Chef Sophie creates exquisite desserts that are as beautiful as they are delicious.</p>
+                    </div>
+                    
+                    <div class="chef-card">
+                        <div class="chef-image" style="background-image: url('https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80')"></div>
+                        <h4>James Chen</h4>
+                        <p>Sous Chef</p>
+                        <p class="chef-bio">With expertise in Asian fusion cuisine, Chef James adds innovative flavors to our traditional dishes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>We'd love to hear from you. Reach out for reservations, questions, or feedback.</p>
+            </div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <div class="contact-details">
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Gourmet Avenue, Foodie City, FC 12345</p>
+                        <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                        <p><i class="fas fa-envelope"></i> info@savorydelights.com</p>
+                    </div>
+                    
+                    <div class="opening-hours">
+                        <h4>Opening Hours</h4>
+                        <ul>
+                            <li><span>Monday - Thursday</span> <span>11:00 AM - 10:00 PM</span></li>
+                            <li><span>Friday - Saturday</span> <span>11:00 AM - 11:00 PM</span></li>
+                            <li><span>Sunday</span> <span>10:00 AM - 9:00 PM</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+                
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <i class="fas fa-map-marked-alt"></i> Interactive Map Would Appear Here
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Login Page (Updated) -->
+    <div id="login" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2 id="login-title">Login to Your Account</h2>
+                <p id="login-subtitle">Access your account to view order history and save favorites</p>
+            </div>
+            
+            <div class="login-container">
+                <div class="login-form" id="login-form-container">
+                    <!-- Login form will be loaded dynamically based on mode -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading form...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- NEW: Registration Page -->
+    <div id="register" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>Create Your Account</h2>
+                <p>Join Savory Delights to track orders and save favorites</p>
+            </div>
+            
+            <div class="login-container">
+                <div class="login-form">
+                    <h2>Sign Up</h2>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="reg-name">Full Name</label>
+                            <input type="text" id="reg-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email">Email Address</label>
+                            <input type="email" id="reg-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-phone">Phone Number</label>
+                            <input type="tel" id="reg-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <input type="password" id="reg-password" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-confirm-password">Confirm Password</label>
+                            <input type="password" id="reg-confirm-password" required>
+                        </div>
+                        <button type="submit" class="login-btn">Create Account</button>
+                    </form>
+                    <div class="form-footer">
+                        <p>Already have an account? <a href="#" onclick="showPage('login')">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- NEW: Orders Page -->
+    <div id="orders" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>My Orders</h2>
+                <p>Track your orders and view order history</p>
+            </div>
+            
+            <div class="cart-container">
+                <div id="orders-content">
+                    <!-- Orders will be loaded dynamically -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading your orders...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- NEW: Reservations Page -->
+    <div id="reservations" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>My Reservations</h2>
+                <p>View and manage your table reservations</p>
+            </div>
+            
+            <div class="cart-container">
+                <div id="reservations-content">
+                    <!-- Reservations will be loaded dynamically -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading your reservations...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- NEW: Profile Page -->
+    <div id="profile" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>My Profile</h2>
+                <p>Manage your account information</p>
+            </div>
+            
+            <div class="login-container">
+                <div class="login-form">
+                    <h2>Profile Information</h2>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="profile-name">Full Name</label>
+                            <input type="text" id="profile-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email Address</label>
+                            <input type="email" id="profile-email" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">Phone Number</label>
+                            <input type="tel" id="profile-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-password">New Password (leave blank to keep current)</label>
+                            <input type="password" id="profile-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-confirm-password">Confirm New Password</label>
+                            <input type="password" id="profile-confirm-password">
+                        </div>
+                        <button type="submit" class="login-btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Cart Page (Updated) -->
+    <div id="cart" class="page-container">
+        <section class="section">
+            <div class="section-title">
+                <h2>Your Cart</h2>
+                <p>Review your selections before checkout</p>
+            </div>
+            
+            <div class="cart-container">
+                <div id="cart-content">
+                    <!-- Cart items will be dynamically added here -->
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading your cart...</p>
+                    </div>
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (8%):</span>
+                        <span id="tax">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee:</span>
+                        <span id="delivery-fee">$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                    
+                    <!-- Delivery Options -->
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label for="delivery-option">Delivery Option</label>
+                        <select id="delivery-option" class="form-group" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px;">
+                            <option value="pickup">Pickup</option>
+                            <option value="delivery">Delivery</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Delivery Address (hidden by default) -->
+                    <div id="delivery-address-group" class="form-group" style="display: none;">
+                        <label for="delivery-address">Delivery Address</label>
+                        <textarea id="delivery-address" placeholder="Enter your delivery address" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <!-- Special Instructions -->
+                    <div class="form-group">
+                        <label for="special-instructions">Special Instructions</label>
+                        <textarea id="special-instructions" placeholder="Any special instructions for your order?" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- NEW: Reservation Modal -->
+    <div class="modal-overlay" id="reservation-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Make a Reservation</h3>
+                <button class="close-modal" onclick="closeReservationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reservationForm">
+                    <div class="reservation-form">
+                        <div class="form-group">
+                            <label for="reservation-name">Name *</label>
+                            <input type="text" id="reservation-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservation-email">Email *</label>
+                            <input type="email" id="reservation-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservation-phone">Phone *</label>
+                            <input type="tel" id="reservation-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservation-date">Date *</label>
+                            <input type="date" id="reservation-date" required min="<?php echo date('Y-m-d'); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="reservation-time">Time *</label>
+                            <select id="reservation-time" required>
+                                <option value="">Select Time</option>
+                                <option value="17:00">5:00 PM</option>
+                                <option value="17:30">5:30 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                                <option value="18:30">6:30 PM</option>
+                                <option value="19:00">7:00 PM</option>
+                                <option value="19:30">7:30 PM</option>
+                                <option value="20:00">8:00 PM</option>
+                                <option value="20:30">8:30 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservation-guests">Number of Guests *</label>
+                            <select id="reservation-guests" required>
+                                <option value="1">1 Person</option>
+                                <option value="2">2 People</option>
+                                <option value="3">3 People</option>
+                                <option value="4">4 People</option>
+                                <option value="5">5 People</option>
+                                <option value="6">6 People</option>
+                                <option value="7">7 People</option>
+                                <option value="8">8 People</option>
+                                <option value="9">9+ People</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="reservation-requests">Special Requests (Optional)</label>
+                            <textarea id="reservation-requests" rows="3" placeholder="Any special requests or dietary restrictions?"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" style="margin-top: 1.5rem; width: 100%;">Book Reservation</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Savory Delights</h3>
+                <p>Experience the finest culinary creations in a warm and inviting atmosphere.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-tripadvisor"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a onclick="showPage('home')">Home</a></li>
+                    <li><a onclick="showPage('menu')">Menu</a></li>
+                    <li><a onclick="showPage('about')">About</a></li>
+                    <li><a onclick="showPage('contact')">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Gourmet Avenue, Foodie City</li>
+                    <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@savorydelights.com</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Newsletter</h3>
+                <p>Subscribe to receive updates on special offers and new menu items.</p>
+                <form id="newsletterForm">
+                    <input type="email" id="newsletter-email" placeholder="Your email address" style="padding: 0.7rem; width: 100%; margin-bottom: 1rem; border-radius: 4px; border: none;">
+                    <button type="submit" class="cta-button" style="width: 100%;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Savory Delights Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- API Configuration -->
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3001/api';
+        
+        // Session management
+        function getSessionId() {
+            let sessionId = localStorage.getItem('sessionId');
+            if (!sessionId) {
+                sessionId = 'guest_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('sessionId', sessionId);
+            }
+            return sessionId;
+        }
+
+        // Authentication state
+        function isLoggedIn() {
+            return !!localStorage.getItem('token');
+        }
+
+        function getCurrentUser() {
+            const user = localStorage.getItem('user');
+            return user ? JSON.parse(user) : null;
+        }
+
+        function getToken() {
+            return localStorage.getItem('token');
+        }
+
+        // API call helper
+        async function apiCall(endpoint, method = 'GET', data = null, requiresAuth = false) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+
+            if (requiresAuth) {
+                const token = getToken();
+                if (!token) {
+                    throw new Error('Authentication required');
+                }
+                options.headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || `API request failed: ${response.status}`);
+                }
+
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                showAlert(error.message, 'error');
+                throw error;
+            }
+        }
+
+        // Alert system
+        function showAlert(message, type = 'info') {
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <span>${message}</span>
+                <button class="close-alert" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            container.appendChild(alert);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+
+        // User interface updates
+        function updateUserUI() {
+            const isUserLoggedIn = isLoggedIn();
+            const user = getCurrentUser();
+            
+            if (isUserLoggedIn && user) {
+                document.getElementById('login-nav-item').style.display = 'none';
+                document.getElementById('user-nav-item').style.display = 'block';
+                document.getElementById('user-name').textContent = user.name;
+                
+                // Update login page if active
+                if (document.getElementById('login').classList.contains('active')) {
+                    showPage('home');
+                }
+            } else {
+                document.getElementById('login-nav-item').style.display = 'block';
+                document.getElementById('user-nav-item').style.display = 'none';
+            }
+        }
+
+        // Page navigation (updated)
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-container').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find and activate the corresponding nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.textContent.toLowerCase().includes(pageId.toLowerCase()) || 
+                    (pageId === 'home' && link.textContent.toLowerCase() === 'home')) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Load page-specific content
+            switch(pageId) {
+                case 'home':
+                    loadFeaturedDishes();
+                    break;
+                case 'menu':
+                    loadMenuItems();
+                    break;
+                case 'cart':
+                    loadCart();
+                    break;
+                case 'orders':
+                    if (isLoggedIn()) {
+                        loadOrders();
+                    } else {
+                        showPage('login');
+                        showAlert('Please login to view your orders', 'info');
+                    }
+                    break;
+                case 'reservations':
+                    if (isLoggedIn()) {
+                        loadReservations();
+                    } else {
+                        showPage('login');
+                        showAlert('Please login to view your reservations', 'info');
+                    }
+                    break;
+                case 'profile':
+                    if (isLoggedIn()) {
+                        loadProfile();
+                    } else {
+                        showPage('login');
+                        showAlert('Please login to view your profile', 'info');
+                    }
+                    break;
+                case 'login':
+                    loadLoginForm();
+                    break;
+            }
+            
+            // Scroll to top when changing pages
+            window.scrollTo(0, 0);
+        }
+
+        // Load featured dishes
+        async function loadFeaturedDishes() {
+            const container = document.getElementById('featured-dishes-container');
+            if (!container) return;
+            
+            try {
+                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading featured dishes...</p></div>';
+                
+                const result = await apiCall('/menu?featured=true');
+                
+                if (result.length === 0) {
+                    container.innerHTML = '<p class="loading">No featured dishes available at the moment.</p>';
+                    return;
+                }
+                
+                let dishesHTML = '';
+                result.forEach(dish => {
+                    dishesHTML += `
+                        <div class="dish-card animate">
+                            <div class="dish-image" style="background-image: url('${dish.image}')"></div>
+                            <div class="dish-info">
+                                <h3>${dish.name}</h3>
+                                <p>${dish.description}</p>
+                                <div class="dish-price">
+                                    <span class="price">$${dish.price.toFixed(2)}</span>
+                                    <button class="add-to-cart" onclick="addToCartAPI('${dish.id}')">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = dishesHTML;
+            } catch (error) {
+                container.innerHTML = '<p class="loading">Failed to load featured dishes. Please try again later.</p>';
+            }
+        }
+
+        // Load all menu items
+        async function loadMenuItems(category = 'all') {
+            const container = document.getElementById('menu-items-container');
+            if (!container) return;
+            
+            try {
+                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading menu items...</p></div>';
+                
+                const endpoint = category === 'all' ? '/menu' : `/menu?category=${category}`;
+                const result = await apiCall(endpoint);
+                
+                if (result.length === 0) {
+                    container.innerHTML = '<p class="loading">No menu items available in this category.</p>';
+                    return;
+                }
+                
+                let menuHTML = '';
+                result.forEach(item => {
+                    menuHTML += `
+                        <div class="menu-item" data-category="${item.category}">
+                            <div class="menu-item-image" style="background-image: url('${item.image}')"></div>
+                            <div class="menu-item-info">
+                                <h3>${item.name}</h3>
+                                <p>${item.description}</p>
+                                <div class="menu-item-price">
+                                    <span class="price">$${item.price.toFixed(2)}</span>
+                                    <button class="add-to-cart" onclick="addToCartAPI('${item.id}')">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = menuHTML;
+            } catch (error) {
+                container.innerHTML = '<p class="loading">Failed to load menu items. Please try again later.</p>';
+            }
+        }
+
+        // Menu filtering
+        function filterMenu(category) {
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            const activeBtn = Array.from(buttons).find(btn => 
+                btn.textContent.toLowerCase().includes(category.toLowerCase())
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            loadMenuItems(category);
+        }
+
+        // Cart functionality
+        let currentCart = null;
+
+        async function loadCart() {
+            const container = document.getElementById('cart-content');
+            if (!container) return;
+            
+            try {
+                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading your cart...</p></div>';
+                
+                const sessionId = getSessionId();
+                const result = await apiCall(`/cart?sessionId=${sessionId}`);
+                currentCart = result;
+                
+                updateCartUI(result);
+            } catch (error) {
+                container.innerHTML = '<p class="loading">Failed to load cart. Please try again later.</p>';
+            }
+        }
+
+        function updateCartUI(cart) {
+            const container = document.getElementById('cart-content');
+            const cartCount = document.getElementById('cart-count');
+            
+            if (!cart || cart.items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some delicious items from our menu</p>
+                        <button class="cta-button" onclick="showPage('menu')">Browse Menu</button>
+                    </div>
+                `;
+                
+                if (cartCount) {
+                    cartCount.textContent = '0';
+                }
+                
+                updateCartSummary([]);
+                return;
+            }
+            
+            // Update cart count
+            const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+            if (cartCount) {
+                cartCount.textContent = totalItems;
+            }
+            
+            // Build cart HTML
+            let cartHTML = '<div class="cart-items">';
+            cart.items.forEach((item, index) => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image" style="background-image: ${item.image}"></div>
+                        <div class="cart-item-details">
+                            <h3>${item.name}</h3>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn" onclick="updateCartItemQuantity('${item.itemId}', ${item.quantity - 1})">-</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="updateCartItemQuantity('${item.itemId}', ${item.quantity + 1})">+</button>
+                        </div>
+                        <button class="remove-item" onclick="removeFromCartAPI('${item.itemId}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            cartHTML += '</div>';
+            container.innerHTML = cartHTML;
+            
+            // Update summary
+            updateCartSummary(cart.items);
+        }
+
+        function updateCartSummary(items) {
+            const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08;
+            const deliveryFee = document.getElementById('delivery-option').value === 'delivery' ? 5.00 : 0.00;
+            const total = subtotal + tax + deliveryFee;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('delivery-fee').textContent = `$${deliveryFee.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        async function addToCartAPI(itemId) {
+            try {
+                const sessionId = getSessionId();
+                const user = getCurrentUser();
+                
+                const data = {
+                    sessionId,
+                    itemId,
+                    quantity: 1
+                };
+                
+                if (user) {
+                    data.userId = user.id;
+                }
+                
+                await apiCall('/cart/items', 'POST', data);
+                
+                showAlert('Item added to cart!', 'success');
+                loadCart();
+            } catch (error) {
+                console.error('Failed to add item to cart:', error);
+            }
+        }
+
+        async function updateCartItemQuantity(itemId, newQuantity) {
+            if (newQuantity < 1) {
+                await removeFromCartAPI(itemId);
+                return;
+            }
+            
+            try {
+                const sessionId = getSessionId();
+                const user = getCurrentUser();
+                
+                const data = {
+                    sessionId,
+                    quantity: newQuantity
+                };
+                
+                if (user) {
+                    data.userId = user.id;
+                }
+                
+                await apiCall(`/cart/items/${itemId}`, 'PUT', data);
+                loadCart();
+            } catch (error) {
+                console.error('Failed to update item quantity:', error);
+            }
+        }
+
+        async function removeFromCartAPI(itemId) {
+            try {
+                const sessionId = getSessionId();
+                const user = getCurrentUser();
+                
+                const endpoint = `/cart/items/${itemId}?sessionId=${sessionId}${user ? `&userId=${user.id}` : ''}`;
+                await apiCall(endpoint, 'DELETE');
+                
+                showAlert('Item removed from cart', 'info');
+                loadCart();
+            } catch (error) {
+                console.error('Failed to remove item from cart:', error);
+            }
+        }
+
+        // Checkout
+        async function checkout() {
+            if (!currentCart || currentCart.items.length === 0) {
+                showAlert('Your cart is empty', 'error');
+                return;
+            }
+            
+            if (!isLoggedIn()) {
+                showAlert('Please login to complete your order', 'info');
+                showPage('login');
+                return;
+            }
+            
+            try {
+                const deliveryOption = document.getElementById('delivery-option').value;
+                const deliveryAddress = deliveryOption === 'delivery' 
+                    ? document.getElementById('delivery-address').value 
+                    : null;
+                const specialInstructions = document.getElementById('special-instructions').value;
+                
+                if (deliveryOption === 'delivery' && !deliveryAddress) {
+                    showAlert('Please enter a delivery address', 'error');
+                    return;
+                }
+                
+                const data = {
+                    sessionId: getSessionId(),
+                    deliveryAddress,
+                    specialInstructions
+                };
+                
+                const result = await apiCall('/orders', 'POST', data, true);
+                
+                showAlert('Order placed successfully!', 'success');
+                showPage('orders');
+            } catch (error) {
+                console.error('Checkout failed:', error);
+            }
+        }
+
+        // Authentication functions
+        async function login(email, password) {
+            try {
+                const result = await apiCall('/auth/login', 'POST', { email, password });
+                
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('user', JSON.stringify(result.user));
+                
+                // Merge cart if exists
+                await mergeCartWithUser();
+                
+                updateUserUI();
+                showAlert('Login successful!', 'success');
+                showPage('home');
+                
+                return true;
+            } catch (error) {
+                showAlert('Login failed: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        async function register(userData) {
+            try {
+                const result = await apiCall('/auth/register', 'POST', userData);
+                
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('user', JSON.stringify(result.user));
+                
+                updateUserUI();
+                showAlert('Registration successful!', 'success');
+                showPage('home');
+                
+                return true;
+            } catch (error) {
+                showAlert('Registration failed: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        async function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            updateUserUI();
+            showAlert('Logged out successfully', 'info');
+            showPage('home');
+        }
+
+        async function mergeCartWithUser() {
+            const sessionId = getSessionId();
+            const user = getCurrentUser();
+            
+            if (!user) return;
+            
+            try {
+                // Get session cart
+                const sessionCart = await apiCall(`/cart?sessionId=${sessionId}`);
+                
+                if (sessionCart.items.length > 0) {
+                    // Merge with user cart
+                    for (const item of sessionCart.items) {
+                        await apiCall('/cart/items', 'POST', {
+                            userId: user.id,
+                            itemId: item.itemId,
+                            quantity: item.quantity
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to merge cart:', error);
+            }
+        }
+
+        // Load login form
+        function loadLoginForm() {
+            const container = document.getElementById('login-form-container');
+            if (!container) return;
+            
+            container.innerHTML = `
+                <h2>Welcome Back</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="login-btn">Login</button>
+                </form>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" onclick="showPage('register')">Sign up here</a></p>
+                    <p><a href="#" onclick="showAlert('Password reset feature coming soon!', 'info')">Forgot your password?</a></p>
+                </div>
+            `;
+            
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                await login(email, password);
+            });
+        }
+
+        // Load orders
+        async function loadOrders() {
+            const container = document.getElementById('orders-content');
+            if (!container) return;
+            
+            try {
+                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading your orders...</p></div>';
+                
+                const result = await apiCall('/orders', 'GET', null, true);
+                
+                if (result.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>No orders yet</h3>
+                            <p>Place your first order from our menu</p>
+                            <button class="cta-button" onclick="showPage('menu')">Browse Menu</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let ordersHTML = '<div class="cart-items">';
+                result.forEach(order => {
+                    const statusClass = `order-status status-${order.status}`;
+                    ordersHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-details" style="flex-grow: 1;">
+                                <h3>Order #${order.id.substring(0, 8)}</h3>
+                                <p>Placed on ${new Date(order.createdAt).toLocaleDateString()}</p>
+                                <p>Items: ${order.items.length}</p>
+                                <div class="summary-row" style="margin-top: 0.5rem;">
+                                    <span>Total:</span>
+                                    <span class="price">$${order.total.toFixed(2)}</span>
+                                </div>
+                                <div class="${statusClass}" style="margin-top: 0.5rem;">
+                                    ${order.status}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                ordersHTML += '</div>';
+                container.innerHTML = ordersHTML;
+            } catch (error) {
+                container.innerHTML = '<p class="loading">Failed to load orders. Please try again later.</p>';
+            }
+        }
+
+        // Load reservations
+        async function loadReservations() {
+            const container = document.getElementById('reservations-content');
+            if (!container) return;
+            
+            try {
+                container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading your reservations...</p></div>';
+                
+                const result = await apiCall('/reservations', 'GET', null, true);
+                
+                if (result.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>No reservations yet</h3>
+                            <p>Make your first reservation</p>
+                            <button class="cta-button" onclick="showReservationModal()">Book a Table</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let reservationsHTML = '<div class="cart-items">';
+                result.forEach(reservation => {
+                    reservationsHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-details" style="flex-grow: 1;">
+                                <h3>Reservation for ${reservation.guests} people</h3>
+                                <p>Date: ${reservation.date} at ${reservation.time}</p>
+                                <p>Name: ${reservation.name}</p>
+                                <p>Status: <span class="order-status status-${reservation.status}">${reservation.status}</span></p>
+                                ${reservation.specialRequests ? `<p>Special Requests: ${reservation.specialRequests}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                reservationsHTML += '</div>';
+                container.innerHTML = reservationsHTML;
+            } catch (error) {
+                container.innerHTML = '<p class="loading">Failed to load reservations. Please try again later.</p>';
+            }
+        }
+
+        // Load profile
+        function loadProfile() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            document.getElementById('profile-name').value = user.name || '';
+            document.getElementById('profile-email').value = user.email || '';
+            document.getElementById('profile-phone').value = user.phone || '';
+            
+            document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                // Profile update logic would go here
+                showAlert('Profile update feature coming soon!', 'info');
+            });
+        }
+
+        // Reservation modal
+        function showReservationModal() {
+            document.getElementById('reservation-modal').classList.add('active');
+            
+            // Pre-fill with user data if logged in
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('reservation-name').value = user.name || '';
+                document.getElementById('reservation-email').value = user.email || '';
+                document.getElementById('reservation-phone').value = user.phone || '';
+            }
+            
+            // Set minimum date to today
+            document.getElementById('reservation-date').min = new Date().toISOString().split('T')[0];
+        }
+
+        function closeReservationModal() {
+            document.getElementById('reservation-modal').classList.remove('active');
+            document.getElementById('reservationForm').reset();
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update user UI
+            updateUserUI();
+            
+            // Load initial data
+            loadFeaturedDishes();
+            
+            // Event listeners for delivery option
+            document.getElementById('delivery-option')?.addEventListener('change', function() {
+                const addressGroup = document.getElementById('delivery-address-group');
+                if (this.value === 'delivery') {
+                    addressGroup.style.display = 'block';
+                } else {
+                    addressGroup.style.display = 'none';
+                }
+                if (currentCart) {
+                    updateCartSummary(currentCart.items);
+                }
+            });
+            
+            // User menu toggle
+            document.getElementById('user-menu-toggle')?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('user-dropdown').classList.toggle('active');
+            });
+            
+            // Close user dropdown when clicking outside
+            document.addEventListener('click', function() {
+                const dropdown = document.getElementById('user-dropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('active');
+                }
+            });
+            
+            // Contact form
+            document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+                
+                try {
+                    await apiCall('/contact', 'POST', formData);
+                    showAlert('Message sent successfully! We will get back to you soon.', 'success');
+                    document.getElementById('contactForm').reset();
+                } catch (error) {
+                    // Error is already handled by apiCall
+                }
+            });
+            
+            // Registration form
+            document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const password = document.getElementById('reg-password').value;
+                const confirmPassword = document.getElementById('reg-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showAlert('Passwords do not match', 'error');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showAlert('Password must be at least 6 characters', 'error');
+                    return;
+                }
+                
+                const userData = {
+                    name: document.getElementById('reg-name').value,
+                    email: document.getElementById('reg-email').value,
+                    phone: document.getElementById('reg-phone').value,
+                    password: password
+                };
+                
+                await register(userData);
+            });
+            
+            // Reservation form
+            document.getElementById('reservationForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = {
+                    name: document.getElementById('reservation-name').value,
+                    email: document.getElementById('reservation-email').value,
+                    phone: document.getElementById('reservation-phone').value,
+                    date: document.getElementById('reservation-date').value,
+                    time: document.getElementById('reservation-time').value,
+                    guests: document.getElementById('reservation-guests').value,
+                    specialRequests: document.getElementById('reservation-requests').value
+                };
+                
+                try {
+                    await apiCall('/reservations', 'POST', formData);
+                    showAlert('Reservation created successfully!', 'success');
+                    closeReservationModal();
+                    
+                    // Reload reservations page if active
+                    if (document.getElementById('reservations').classList.contains('active')) {
+                        loadReservations();
+                    }
+                } catch (error) {
+                    // Error is already handled by apiCall
+                }
+            });
+            
+            // Newsletter form
+            document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('newsletter-email').value;
+                showAlert('Thank you for subscribing to our newsletter!', 'success');
+                document.getElementById('newsletterForm').reset();
+            });
+        });
+
+        // Initialize page
+        updateUserUI();
+        loadFeaturedDishes();
+    </script>
+</body>
+</html>
